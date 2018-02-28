@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: httpd
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    creationTimestamp: null
+    labels:
+      build: httpd
+      app: httpd
+    name: httpd
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: httpd:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: https://github.com/Rondenion/dockertest.git
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: DockerImage
+          name: httpd:latest
+      type: Docker
+    triggers:
+    - type: ConfigChange
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: httpd
+      app: httpd
+    name: httpd
+  spec:
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: httpd:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
