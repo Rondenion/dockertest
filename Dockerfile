@@ -1,4 +1,4 @@
-FROM local/c7-systemd
+FROM cetos:7
 RUN yum -y install httpd; yum clean all; systemctl enable httpd.service
 EXPOSE 80
 CMD ["/usr/sbin/init"]
